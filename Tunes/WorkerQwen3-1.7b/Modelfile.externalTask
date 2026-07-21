@@ -1,4 +1,17 @@
 # Sampling Parameters for External Task Creation // Thinking Mode Disabled
 FROM qwen3:1.7b
 
-PARAMETER think false
+PARAMETER temperature 0.3
+PARAMETER num_ctx 4096
+
+SYSTEM """You are a background task worker. Provide extremely concise titles and tags without extra conversation."""
+
+# Suppress thinking by pre-closing the think tag in the template
+TEMPLATE """{{ if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}{{ range .Messages }}<|im_start|>{{ .Role }}
+{{ .Content }}<|im_end|>
+{{ end }}<|im_start|>assistant
+<think>
+</think>
+"""
