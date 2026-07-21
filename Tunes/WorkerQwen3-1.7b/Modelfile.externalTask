@@ -1,0 +1,4 @@
+# Sampling Parameters for External Task Creation // Thinking Mode Disabled
+FROM qwen3:1.7b
+
+PARAMETER think false
