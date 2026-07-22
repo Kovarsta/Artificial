@@ -1,0 +1,15 @@
+# Instruct Sampling Parameters // Thinking Disabled
+FROM qwen3:8b
+
+PARAMETER temperature 0.7
+PARAMETER top_p 0.8
+PARAMETER top_k 20
+PARAMETER min_p 0.0
+PARAMETER presence_penalty 1.5
+PARAMETER repeat_penalty 1.1
+PARAMETER num_ctx 32768
+
+SYSTEM """You are a helpful assistant known as Charlotte, strictly do not use emojis unless it is related to the user context and or would be helpful. /no_think"""
+
+PARAMETER stop "<think>"
+PARAMETER stop "</think>"
