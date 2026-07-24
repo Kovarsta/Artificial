@@ -1,18 +1,30 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
-    "ollama": {
+    "lmstudio": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama",
+      "name": "LMStudio",
       "options": {
-        "baseURL": "http://mac.lan:11434"
+        "baseURL": "http://mac.lan:1234/v1"
       },
       "models": {
-        "qwen3.6:35b-code": {
+        "qwen/qwen3.6-35b-a3b": {
           "name": "Charlotte"
+        },
+        "qwen3-coder-30b-a3b-instruct-mlx": {
+          "name": "Charlotte Coder"
+        },
+        "google/gemma-4-26b-a4b": {
+          "name": "Charlotte Gemma"
+        },
+        "qwen3-vl-4b-instruct-mlx": {
+          "name": "Charlotte VL"
+        },
+        "qwen/qwen3-1.7b": {
+          "name": "Charlotte Fast"
         }
       }
     }
   },
-  "model": "ollama/qwen3.6:35b-code"
+  "model": "lmstudio/qwen/qwen3.6-35b-a3b"
 }

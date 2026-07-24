@@ -1,0 +1,69 @@
+services:
+  open-terminal:
+    image: ghcr.io/open-webui/open-terminal:latest
+    container_name: open-terminal
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - OPEN_TERMINAL_API_KEY=kovarsta
+    volumes:
+      - open-terminal-workspace:/home/user
+    networks:
+      - ai-network
+
+  vane:
+    image: itzcrazykns1337/vane:latest
+    container_name: vane
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "8081:8080"
+    volumes:
+      - vane-data:/home/vane/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - ai-network
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - open-webui-data:/app/backend/data
+    environment:
+      - OPENAI_API_BASE_URL=http://host.docker.internal:1234/v1
+      - OPENAI_API_KEY=lmstudio
+      - RAG_WEB_SEARCH_ENGINE=searxng
+      - SEARXNG_QUERY_URL=http://vane:3000/search?q=<query>
+      - ENABLE_CODE_EXECUTION=true
+      - CODE_EXECUTION_ENGINE=open-webui
+      - OPEN_TERMINAL_API_URL=http://open-terminal:8000
+      - OPEN_TERMINAL_API_KEY=kovarsta
+      - TTS_ENGINE=kokoro-tts
+      - KOKORO_TTS_URL=http://kokoro-tts:8880
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - ai-network
+
+  kokoro-tts:
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:latest
+    container_name: kokoro-tts
+    restart: unless-stopped
+    ports:
+      - "8880:8880"
+    networks:
+      - ai-network
+
+volumes:
+  open-webui-data:
+  vane-data:
+  open-terminal-workspace:
+
+networks:
+  ai-network:
+    driver: bridge

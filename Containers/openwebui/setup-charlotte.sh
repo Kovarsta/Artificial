@@ -68,12 +68,14 @@ for mid, name, base_id, sys_prompt, params in models:
     print(f'  Created: {name} -> {base_id}')
 
 tts_updates = [
-    ('audio.tts.engine', '\"kokoro-tts\"'),
+    ('audio.tts.engine', '\"openai\"'),
+    ('audio.tts.openai.api_base_url', '\"http://kokoro-tts:8880/v1\"'),
+    ('audio.tts.openai.api_key', '\"none\"'),
     ('audio.tts.model', '\"kokoro\"'),
     ('audio.tts.voice', '\"af_heart\"'),
 ]
 for k, v in tts_updates:
-    c.execute('UPDATE config SET value = ? WHERE key = ?', (v, k))
+    c.execute('INSERT OR REPLACE INTO config (key, value) VALUES (?, ?)', (k, v))
     print(f'  TTS: {k} = {v}')
 
 c.execute(\"UPDATE config SET value = '\"charlotte-worker\"' WHERE key = 'task.model.default'\")
